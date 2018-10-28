@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Convert on David Sjoberg</title>
+    <link>/tags/convert/</link>
+    <description>Recent content in Convert on David Sjoberg</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-US</language>
+    <lastBuildDate>Sun, 21 Oct 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/convert/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>convert - simple data type conversion</title>
+      <link>/blog/intro-hablar-convert/</link>
+      <pubDate>Sun, 21 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/intro-hablar-convert/</guid>
+      <description>convert your data types Before everything there was data type conversion Best practise of data analysis is to fix data types directly after importing data into R. This helps in many ways:
+ You only need to do it once If there are any errors you know where in the script it should be fixed It scales up your code. For example, all columns that should be numeric could be converted at the same time.</description>
+    </item>
+    
+  </channel>
+</rss>

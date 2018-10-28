@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Retype on David Sjoberg</title>
+    <link>/tags/retype/</link>
+    <description>Recent content in Retype on David Sjoberg</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-US</language>
+    <lastBuildDate>Fri, 19 Oct 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/retype/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>retype - auto data type conversion</title>
+      <link>/blog/intro-hablar-retype/</link>
+      <pubDate>Fri, 19 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/intro-hablar-retype/</guid>
+      <description>Can the data be simpler? retype quick start your analysis Getting data into R can be hassle. But once you do, it often have incorrect data types/classes. For instance, it is not uncommon that numeric variables are characters or dates are classed as characters.
+Data conversion is cumbersome and small coding mistakes can produce large issues. The hablar package facilitates correction of all data types directly after you import the data into R such that you can avoid dangerous operations at later stages!</description>
+    </item>
+    
+  </channel>
+</rss>

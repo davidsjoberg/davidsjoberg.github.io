@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>R on David Sjoberg</title>
+    <link>/tags/r/</link>
+    <description>Recent content in R on David Sjoberg</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-US</language>
+    <lastBuildDate>Sun, 21 Oct 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/r/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>convert - simple data type conversion</title>
+      <link>/blog/intro-hablar-convert/</link>
+      <pubDate>Sun, 21 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/intro-hablar-convert/</guid>
+      <description>convert your data types Before everything there was data type conversion Best practise of data analysis is to fix data types directly after importing data into R. This helps in many ways:
+ You only need to do it once If there are any errors you know where in the script it should be fixed It scales up your code. For example, all columns that should be numeric could be converted at the same time.</description>
+    </item>
+    
+    <item>
+      <title>s - short and simple summarizing</title>
+      <link>/blog/intro-hablar-s/</link>
+      <pubDate>Sat, 20 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/intro-hablar-s/</guid>
+      <description>Overview Description The s function is a simple function that helps you get intuitive results when summarizing data. It is made to be used in conjuction with summarize functions, for example min , sum and mean. s takes a vector and mutates it in the following ways:
+ It replaces all non-rational numbers from numeric vectors and replace them with NA. Non-rational numbers are Inf, -Inf and NaN.
+ It removes NA from the vector by default</description>
+    </item>
+    
+    <item>
+      <title>retype - auto data type conversion</title>
+      <link>/blog/intro-hablar-retype/</link>
+      <pubDate>Fri, 19 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/intro-hablar-retype/</guid>
+      <description>Can the data be simpler? retype quick start your analysis Getting data into R can be hassle. But once you do, it often have incorrect data types/classes. For instance, it is not uncommon that numeric variables are characters or dates are classed as characters.
+Data conversion is cumbersome and small coding mistakes can produce large issues. The hablar package facilitates correction of all data types directly after you import the data into R such that you can avoid dangerous operations at later stages!</description>
+    </item>
+    
+  </channel>
+</rss>
