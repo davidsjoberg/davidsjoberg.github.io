@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>/2018/11/10/make-an-awesome-map-in-r/</loc>
+    <lastmod>2018-11-10T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/blog/intro-hablar-convert/</loc>
     <lastmod>2018-10-21T00:00:00+00:00</lastmod>
   </url>
@@ -41,7 +46,7 @@
   
   <url>
     <loc>/</loc>
-    <lastmod>2018-10-21T00:00:00+00:00</lastmod>
+    <lastmod>2018-11-10T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -54,6 +59,12 @@
   <url>
     <loc>/categories/hablar/</loc>
     <lastmod>2018-10-21T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/post/</loc>
+    <lastmod>2018-11-10T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

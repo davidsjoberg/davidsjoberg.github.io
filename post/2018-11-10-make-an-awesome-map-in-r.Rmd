@@ -1,0 +1,344 @@
+---
+title: Make an awesome map in R
+author: David Sjoberg
+date: '2018-11-05'
+slug: make-an-awesome-map-in-r
+categories: [R]
+tags: [R, leaflet, hablar, gapminder]
+description: ''
+---
+
+
+```{r setup, include=FALSE}
+
+library(rgdal)
+library(sp)
+library(tidyverse)
+library(readxl)
+library(RColorBrewer)
+library(glue)
+library(leaflet.extras)
+library(RCurl)
+library(gapminder)
+library("RColorBrewer")
+
+knitr::opts_chunk$set(echo = TRUE,
+                      warning=F,
+                      error=F,
+                      message=F)
+```
+
+# A simple map
+Maps are one of the best way to visialize data! Everyone can understand a map.
+
+However, making maps can be a struggle and even make you reconsider your love for R. 
+
+In this blog post we will make an interactive map of life expectancy in africa.
+
+```{r, echo = F}
+url <- "https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_0_countries.zip"
+
+map_zip <- download.file(url, destfile="world_map.zip")
+unzip("world_map.zip")
+sp_world <- readOGR(getwd(), "ne_50m_admin_0_countries")
+sp_world <- spTransform(sp_world, CRS("+proj=longlat +ellps=WGS84 +datum=WGS84"))
+gap <- gapminder::gapminder
+sp_world@data <- sp_world@data %>% 
+  mutate(NAME = as.character(NAME)) %>% 
+  mutate(NAME = case_when(NAME == "United States of America"   ~ "United States",
+                          NAME == "Bosnia and Herz."           ~ "Bosnia and Herzegovina States",
+                          NAME == "Dem. Rep. Congo"            ~ "Cote d'Ivoire",
+                          NAME == "Côte d'Ivoire"              ~ "United States",
+                          NAME == "Afghanistan"                ~ "Afghanistan",
+                          NAME == "Central African Rep."       ~ "Central African Republic",
+                          NAME == "Yemen"                      ~ "Yemen, Rep.",
+                          NAME == "Slovakia"                   ~ "Slovak Republic",
+                          NAME == "South Korea"                ~ "Korea, Rep.",
+                          NAME == "Czechia"                    ~ "Czech Republic",
+                          NAME == "Dem. Rep. Congo"            ~ "Congo, Dem. Rep.",
+                          NAME == "Congo"                      ~ "Congo, Rep.",
+                          NAME == "Afghanistan"                ~ "Afghanistan",
+                          T                                    ~ as.character(NAME)))
+gap <- gap %>% 
+  group_by(country) %>% 
+  filter(year == max(year)) %>% 
+  select(country, lifeExp, continent)
+sp_world@data <- sp_world@data %>% 
+  select(NAME)
+sp_world@data <- sp_world@data %>% 
+  left_join(gap, by = c("NAME" = "country"))
+n_bins <- 8
+palette <- brewer.pal(n_bins, "RdYlGn")
+
+mypal <- colorBin(palette = palette, bins = n_bins, domain = sp_world$lifeExp)
+sp_africa <- subset(sp_world, continent == "Africa")
+
+leaflet(sp_africa) %>% 
+  addProviderTiles(providers$OpenMapSurfer.Grayscale,
+                   options = providerTileOptions(noWrap = T)) %>% 
+  setView(lng = 15, lat = 15, zoom = 3.4) %>% 
+  addPolygons(color = "black",
+              weight = 1,
+              highlightOptions = highlightOptions(
+                    color = "white", 
+                    weight = 2,
+                    bringToFront = TRUE),
+              popup=~paste(NAME, lifeExp),
+        popupOptions = popupOptions(maxWidth ="100%", closeOnClick = TRUE),
+        fillColor = ~mypal(lifeExp),
+        fillOpacity = 1) %>% 
+  addLegend(position = "bottomright", pal = mypal, values = ~lifeExp, 
+            title = "Life expectancy",
+            opacity = 1)
+```
+
+
+## Load libraries
+```{r, echo = T}
+library(rgdal)
+library(sp)
+library(tidyverse)
+library(readxl)
+library(RColorBrewer)
+library(glue)
+library(leaflet.extras)
+library(RCurl)
+library(gapminder)
+library("RColorBrewer")
+```
+
+
+## Download borders
+First, we need to download a map of the world. Generally a shape file containing vectors is best. There are several free mappings of the world. Since we want country borders we use Natural Earth's world map.
+```{r}
+url <- "https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_0_countries.zip"
+
+map_zip <- download.file(url, destfile="world_map.zip")
+unzip("world_map.zip")
+```
+
+## Import the borders into R
+The download file can be interpreted by the ```rgdal::reagOGR``` function.
+```{r world map}
+sp_world <- readOGR(getwd(), "ne_50m_admin_0_countries")
+
+```
+
+## A simple plot
+The downloaded map can simply be plotted with ```plot```
+
+```{r}
+plot(sp_world)
+```
+
+# An interactive map
+With the pacakge ```leaflet``` it is easy to make interactive maps. The package is a wrapper for the javascript package leaflet. It downloads the maps continously as the user drag and zoom. Have a look:
+
+```{r pressure}
+leaflet() %>% 
+  addTiles()
+```
+
+
+## Changing map image
+Leaflet comes with many base layebase map. We choose a minimalistic greyscale map.
+```{r}
+leaflet() %>% 
+  addProviderTiles(providers$OpenMapSurfer.Grayscale)
+```
+
+
+# Combining the borders and the interactive map
+This is tricky. There are several projection of the earth. It is not necessary that the borders that we downloaded have the coordinates in the same coordinate system as leaflet uses. To solve this we transform our borders to the projection that leaflet uses.
+```{r}
+sp_world <- spTransform(sp_world, CRS("+proj=longlat +ellps=WGS84 +datum=WGS84"))
+```
+
+Now it is simple to add the polygons (borders) to our leaflet map.
+```{r}
+leaflet(sp_world) %>% 
+  addProviderTiles(providers$OpenMapSurfer.Grayscale) %>% 
+  addPolygons()
+```
+
+This map worked as intended, but it is ugly and the blue color does not fit with the greyscale map we use. We change the borders to black and make them thinner (called a ```weight``` argument in leaflet).
+
+```{r}
+leaflet(sp_world) %>% 
+  addProviderTiles(providers$OpenMapSurfer.Grayscale) %>% 
+  addPolygons(color = "black",
+              weight = 1)
+```
+
+Now we have a simple map. But we get the world contiuing on each side of the world. We change that in the tile-options. Also, we want to zoom in so that the map fills the pane.
+
+```{r}
+leaflet(sp_world) %>% 
+  addProviderTiles(providers$OpenMapSurfer.Grayscale,
+                   options = providerTileOptions(noWrap = T)) %>% 
+  setView(lng = 0, lat = 0, zoom = 2) %>% 
+  addPolygons(color = "black",
+              weight = 1)
+```
+
+## Show data on map
+Let's say we want to plot the life expectancy of the countries in the world. Gapminder is a great data set by the Swedish Professor Hans Rosling.
+```{r}
+gap <- gapminder::gapminder
+head(gap)
+```
+
+The country names differs in gapminder and the map data. We fix some major ones
+```{r}
+sp_world@data <- sp_world@data %>% 
+  mutate(NAME = as.character(NAME)) %>% 
+  mutate(NAME = case_when(NAME == "United States of America"   ~ "United States",
+                          NAME == "Bosnia and Herz."           ~ "Bosnia and Herzegovina States",
+                          NAME == "Dem. Rep. Congo"            ~ "Cote d'Ivoire",
+                          NAME == "Côte d'Ivoire"              ~ "United States",
+                          NAME == "Afghanistan"                ~ "Afghanistan",
+                          NAME == "Central African Rep."       ~ "Central African Republic",
+                          NAME == "Yemen"                      ~ "Yemen, Rep.",
+                          NAME == "Slovakia"                   ~ "Slovak Republic",
+                          NAME == "South Korea"                ~ "Korea, Rep.",
+                          NAME == "Czechia"                    ~ "Czech Republic",
+                          NAME == "Dem. Rep. Congo"            ~ "Congo, Dem. Rep.",
+                          NAME == "Congo"                      ~ "Congo, Rep.",
+                          NAME == "Afghanistan"                ~ "Afghanistan",
+                          T                                    ~ as.character(NAME)))
+```
+
+We want the latest year. Also, we only need the country information and the life expectancy. 
+
+```{r}
+gap <- gap %>% 
+  group_by(country) %>% 
+  filter(year == max(year)) %>% 
+  select(country, lifeExp, continent)
+  
+head(gap)
+```
+
+
+## Adding data to the map
+
+To get data into your map there are a few steps to be made. To access the data in the map object we use ```.@data``` from our borders object ```sp_world```. Since the data of the world map object we use have 241 rows (one for each country) and 94(!) columns we choose the relevant variables we want to use
+```{r}
+dim(sp_world@data)
+```
+
+With ```dplyr``` we choose the relevant columns which is the key we need to match our own data.
+```{r}
+sp_world@data <- sp_world@data %>% 
+  select(NAME)
+```
+
+We add the data with a left join
+```{r}
+sp_world@data <- sp_world@data %>% 
+  left_join(gap, by = c("NAME" = "country"))
+```
+
+# View the data by clicking
+
+Let's see what this made to the map. We add popup by clicking to the map.
+```{r}
+leaflet(sp_world) %>% 
+  addProviderTiles(providers$OpenMapSurfer.Grayscale,
+                   options = providerTileOptions(noWrap = T)) %>% 
+  setView(lng = 0, lat = 0, zoom = 1) %>% 
+  addPolygons(color = "black",
+              weight = 1,
+              highlightOptions = highlightOptions(
+                    color = "white", 
+                    weight = 2,
+                    bringToFront = TRUE),
+              popup=~paste(NAME, lifeExp),
+        popupOptions = popupOptions(maxWidth ="100%", closeOnClick = TRUE))
+```
+
+
+# Adding color
+
+```{r, fig.asp = 1.5}
+library("RColorBrewer")
+display.brewer.all()
+```
+
+Since we want to indicate a low vs high life expectancy where low is considered worse than high we want something that indicates a bad and a good value. The pallette RdYlGn goes from red to green, which is a easy to distinguish.
+
+### Creating a color palette
+We make the palette with brewer.pal. Then we map those color bins to our data range of life expectancy. In this example we use 6 bins.
+
+```{r}
+n_bins <- 8
+palette <- brewer.pal(n_bins, "RdYlGn")
+
+mypal <- colorBin(palette = palette, bins = n_bins, domain = sp_world$lifeExp)
+```
+
+
+```{r}
+leaflet(sp_world) %>% 
+  addProviderTiles(providers$OpenMapSurfer.Grayscale,
+                   options = providerTileOptions(noWrap = T)) %>% 
+  setView(lng = 0, lat = 0, zoom = 1) %>% 
+  addPolygons(color = "black",
+              weight = 1,
+              highlightOptions = highlightOptions(
+                    color = "white", 
+                    weight = 2,
+                    bringToFront = TRUE),
+              popup=~paste(NAME, lifeExp),
+        popupOptions = popupOptions(maxWidth ="100%", closeOnClick = TRUE),
+        fillColor = ~mypal(sp_world$lifeExp),
+        fillOpacity = 1)
+```
+
+### Adding a legend for the color fill
+```{r}
+leaflet(sp_world) %>% 
+  addProviderTiles(providers$OpenMapSurfer.Grayscale,
+                   options = providerTileOptions(noWrap = T)) %>% 
+  setView(lng = 0, lat = 0, zoom = 1) %>% 
+  addPolygons(color = "black",
+              weight = 1,
+              highlightOptions = highlightOptions(
+                    color = "white", 
+                    weight = 2,
+                    bringToFront = TRUE),
+              popup=~paste(NAME, lifeExp),
+        popupOptions = popupOptions(maxWidth ="100%", closeOnClick = TRUE),
+        fillColor = ~mypal(sp_world$lifeExp),
+        fillOpacity = 1) %>% 
+  addLegend(position = "bottomright", pal = mypal, values = sp_world$lifeExp, 
+            title = "Life expectancy",
+            opacity = 1)
+```
+
+# Subsetting the map
+
+## Africa
+```{r}
+sp_africa <- subset(sp_world, continent == "Africa")
+
+leaflet(sp_africa) %>% 
+  addProviderTiles(providers$OpenMapSurfer.Grayscale,
+                   options = providerTileOptions(noWrap = T)) %>% 
+  setView(lng = 15, lat = 15, zoom = 3.4) %>% 
+  addPolygons(color = "black",
+              weight = 1,
+              highlightOptions = highlightOptions(
+                    color = "white", 
+                    weight = 2,
+                    bringToFront = TRUE),
+              popup=~paste(NAME, lifeExp),
+        popupOptions = popupOptions(maxWidth ="100%", closeOnClick = TRUE),
+        fillColor = ~mypal(lifeExp),
+        fillOpacity = 1) %>% 
+  addLegend(position = "bottomright", pal = mypal, values = ~lifeExp, 
+            title = "Life expectancy",
+            opacity = 1)
+```
+
+There you go! If you have any suggestion of how to make it better or prettier, feel free to reach out.
