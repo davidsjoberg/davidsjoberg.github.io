@@ -214,17 +214,17 @@ max(x)</code></pre>
 <pre><code>#&gt; # A tibble: 49 x 2
 #&gt;    homeworld      tallest_human
 #&gt;    &lt;chr&gt;                  &lt;dbl&gt;
-#&gt;  1 Alderaan                 191
-#&gt;  2 Aleen Minor             -Inf
-#&gt;  3 Bespin                   175
-#&gt;  4 Bestine IV               180
-#&gt;  5 Cato Neimoidia          -Inf
-#&gt;  6 Cerea                   -Inf
-#&gt;  7 Champala                -Inf
-#&gt;  8 Chandrila                150
-#&gt;  9 Concord Dawn             183
-#&gt; 10 Corellia                 180
-#&gt; # ... with 39 more rows</code></pre>
+#&gt;  1 &lt;NA&gt;                      NA
+#&gt;  2 Alderaan                 191
+#&gt;  3 Aleen Minor             -Inf
+#&gt;  4 Bespin                   175
+#&gt;  5 Bestine IV               180
+#&gt;  6 Cato Neimoidia          -Inf
+#&gt;  7 Cerea                   -Inf
+#&gt;  8 Champala                -Inf
+#&gt;  9 Chandrila                150
+#&gt; 10 Concord Dawn             183
+#&gt; # … with 39 more rows</code></pre>
 <p>We got negative infinity <code>-Inf</code> again. How could this be?</p>
 <p>This is because some homeworld have no humans, e.g. Cerea. R tries to calculate the maximum value of nothing. The <code>s</code> function can help you out! Since it returns <code>NA</code> if the vector is empty we get:</p>
 <pre class="r"><code>df %&gt;% 
@@ -234,17 +234,17 @@ max(x)</code></pre>
 <pre><code>#&gt; # A tibble: 49 x 2
 #&gt;    homeworld      tallest_human
 #&gt;    &lt;chr&gt;                  &lt;int&gt;
-#&gt;  1 Alderaan                 191
-#&gt;  2 Aleen Minor               NA
-#&gt;  3 Bespin                   175
-#&gt;  4 Bestine IV               180
-#&gt;  5 Cato Neimoidia            NA
-#&gt;  6 Cerea                     NA
-#&gt;  7 Champala                  NA
-#&gt;  8 Chandrila                150
-#&gt;  9 Concord Dawn             183
-#&gt; 10 Corellia                 180
-#&gt; # ... with 39 more rows</code></pre>
+#&gt;  1 &lt;NA&gt;                     193
+#&gt;  2 Alderaan                 191
+#&gt;  3 Aleen Minor               NA
+#&gt;  4 Bespin                   175
+#&gt;  5 Bestine IV               180
+#&gt;  6 Cato Neimoidia            NA
+#&gt;  7 Cerea                     NA
+#&gt;  8 Champala                  NA
+#&gt;  9 Chandrila                150
+#&gt; 10 Concord Dawn             183
+#&gt; # … with 39 more rows</code></pre>
 <p>Now we get missing values for the homeworlds that does not have any humans. Makes sense.</p>
 </div>
 <div id="summarizing-weird-numbers" class="section level3">
@@ -296,12 +296,12 @@ sum_(x)</code></pre>
                   <div class="row">
                     <div class="col-sm-4 col-md-4 col-lg-4">
                       <h6 style="text-align: right">
-                        November 5, 2018
+                        June 16, 2019
                       </h6>
                     </div>
                     <div class="col-sm-8 col-md-8 col-lg-8">
                       <h6 style="text-align: left">
-                        <strong><a href="/2018/11/05/make-an-awesome-map-in-r/">Make an awesome map in R</a></strong>
+                        <strong><a href="/blog/if-not-ifelse-or-if_else-then-what-else/">if not ifelse or if_else then what else?</a></strong>
                       </h6>
                     </div>
                   </div>
@@ -346,7 +346,7 @@ sum_(x)</code></pre>
       if (window.location.hostname == "localhost")
         return;
 
-      var disqus_shortname = '';
+      var disqus_shortname = 'davidsjoberg';
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
       dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);

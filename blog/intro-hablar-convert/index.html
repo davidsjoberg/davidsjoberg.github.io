@@ -89,7 +89,8 @@
 </div>
 <div id="usage" class="section level3">
 <h3>Usage</h3>
-<p><code>convert(.x, ...)</code> where <code>.x</code> is a data frame. <code>...</code> is a placeholder for data type specific conversion functions.</p>
+<p><code>convert(.x, ...)</code>
+where <code>.x</code> is a data frame. <code>...</code> is a placeholder for data type specific conversion functions.</p>
 </div>
 <div id="support-functions" class="section level3">
 <h3>Support functions</h3>
@@ -127,7 +128,7 @@ gapminder</code></pre>
 #&gt; 2 Afghanistan Asia       1957    30.3  9240934      821.
 #&gt; 3 Afghanistan Asia       1962    32.0 10267083      853.
 #&gt; 4 Afghanistan Asia       1967    34.0 11537966      836.
-#&gt; # ... with 1,700 more rows</code></pre>
+#&gt; # … with 1,700 more rows</code></pre>
 <p>We might want to change the country column to character instead of factor. To do this we use <code>chr</code> together with the column name inside <code>convert</code>:</p>
 <pre class="r"><code>gapminder %&gt;% 
   convert(chr(country))</code></pre>
@@ -138,7 +139,7 @@ gapminder</code></pre>
 #&gt; 2 Afghanistan Asia       1957    30.3  9240934      821.
 #&gt; 3 Afghanistan Asia       1962    32.0 10267083      853.
 #&gt; 4 Afghanistan Asia       1967    34.0 11537966      836.
-#&gt; # ... with 1,700 more rows</code></pre>
+#&gt; # … with 1,700 more rows</code></pre>
 <p>This converted the country column to the data type character. But we do not have to make this whole procedure for each column if we want to convert more columns. Let’s say that we also want to convert continent to character and the column lifeExp to integer, pop to double and gdpPercap to numeric. It is simply done:</p>
 <pre class="r"><code>gapminder %&gt;% 
   convert(chr(country, 
@@ -153,7 +154,7 @@ gapminder</code></pre>
 #&gt; 2 Afghanistan Asia       1957      30  9240934      821.
 #&gt; 3 Afghanistan Asia       1962      31 10267083      853.
 #&gt; 4 Afghanistan Asia       1967      34 11537966      836.
-#&gt; # ... with 1,700 more rows</code></pre>
+#&gt; # … with 1,700 more rows</code></pre>
 </div>
 </div>
 <div id="i-can-already-convert-between-data-types.-why-do-i-need-convert" class="section level2">
@@ -172,7 +173,7 @@ gapminder</code></pre>
 #&gt; 2 Afghanistan Asia       1957      30  9240934      821.
 #&gt; 3 Afghanistan Asia       1962      31 10267083      853.
 #&gt; 4 Afghanistan Asia       1967      34 11537966      836.
-#&gt; # ... with 1,700 more rows</code></pre>
+#&gt; # … with 1,700 more rows</code></pre>
 <p>Which gives the same result. However, you need to refer to the column name twice and the data type conversion function for each column. Imagine the code to convert 20 columns.</p>
 <p>However, <code>dplyr</code> have another way of applying the same function to multiple columns which could help, <code>mutate_at</code>. The same example would then look like:</p>
 <pre class="r"><code>gapminder %&gt;% 
@@ -180,6 +181,15 @@ gapminder</code></pre>
   mutate_at(vars(lifeExp), funs(as.integer)) %&gt;% 
   mutate_at(vars(pop), funs(as.double)) %&gt;% 
   mutate_at(vars(gdpPercap), funs(as.numeric))</code></pre>
+<pre><code>#&gt; Warning: funs() is soft deprecated as of dplyr 0.8.0
+#&gt; please use list() instead
+#&gt; 
+#&gt;   # Before:
+#&gt;   funs(name = f(.))
+#&gt; 
+#&gt;   # After: 
+#&gt;   list(name = ~ f(.))
+#&gt; This warning is displayed once per session.</code></pre>
 <pre><code>#&gt; # A tibble: 1,704 x 6
 #&gt;   country     continent  year lifeExp      pop gdpPercap
 #&gt;   &lt;chr&gt;       &lt;chr&gt;     &lt;int&gt;   &lt;int&gt;    &lt;dbl&gt;     &lt;dbl&gt;
@@ -187,7 +197,7 @@ gapminder</code></pre>
 #&gt; 2 Afghanistan Asia       1957      30  9240934      821.
 #&gt; 3 Afghanistan Asia       1962      31 10267083      853.
 #&gt; 4 Afghanistan Asia       1967      34 11537966      836.
-#&gt; # ... with 1,700 more rows</code></pre>
+#&gt; # … with 1,700 more rows</code></pre>
 <p>Which is more easily scaled to deal with data type conversion of large numbers of variables. However, <code>convert</code> does the same job with much less code. In fact, <code>convert</code> uses <code>mutate_at</code> internally. The difference is syntax and code readability. Compare again with <code>convert</code>:</p>
 <pre class="r"><code>gapminder %&gt;% 
   convert(chr(country, 
@@ -202,7 +212,7 @@ gapminder</code></pre>
 #&gt; 2 Afghanistan Asia       1957      30  9240934      821.
 #&gt; 3 Afghanistan Asia       1962      31 10267083      853.
 #&gt; 4 Afghanistan Asia       1967      34 11537966      836.
-#&gt; # ... with 1,700 more rows</code></pre>
+#&gt; # … with 1,700 more rows</code></pre>
 </div>
 <div id="adding-additional-arguments" class="section level2">
 <h2>Adding additional arguments</h2>
@@ -228,7 +238,7 @@ gapminder</code></pre>
 #&gt; 2 Afghanistan Asia      1957  30.332   9240934 820.8530296
 #&gt; 3 Afghanistan Asia      1962  31.997  10267083 853.10071  
 #&gt; 4 Afghanistan Asia      1967  34.02   11537966 836.1971382
-#&gt; # ... with 1,700 more rows</code></pre>
+#&gt; # … with 1,700 more rows</code></pre>
 </div>
 
               <hr>
@@ -238,12 +248,12 @@ gapminder</code></pre>
                   <div class="row">
                     <div class="col-sm-4 col-md-4 col-lg-4">
                       <h6 style="text-align: right">
-                        November 5, 2018
+                        June 16, 2019
                       </h6>
                     </div>
                     <div class="col-sm-8 col-md-8 col-lg-8">
                       <h6 style="text-align: left">
-                        <strong><a href="/2018/11/05/make-an-awesome-map-in-r/">Make an awesome map in R</a></strong>
+                        <strong><a href="/blog/if-not-ifelse-or-if_else-then-what-else/">if not ifelse or if_else then what else?</a></strong>
                       </h6>
                     </div>
                   </div>
@@ -288,7 +298,7 @@ gapminder</code></pre>
       if (window.location.hostname == "localhost")
         return;
 
-      var disqus_shortname = '';
+      var disqus_shortname = 'davidsjoberg';
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
       dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);

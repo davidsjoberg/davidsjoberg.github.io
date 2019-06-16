@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="David Sjoberg" />
+    <meta name="description" content="Mostly skewed to R">
+    <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico">
+    <title>if not ifelse or if_else then what else?</title>
+    <meta name="generator" content="Hugo 0.49.2" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/css/main.css" />
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400,200bold,400old" />
+    
+    <!--[if lt IE 9]>
+			<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+			<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+
+    
+  </head>
+
+  <body>
+    <div id="wrap">
+
+      
+      <nav class="navbar navbar-default">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/"><i class="fa fa-home"></i></a>
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <div class="navbar-collapse collapse" id="navbar">
+      <ul class="nav navbar-nav navbar-right">
+      
+        
+        <li><a href="/blog/">BLOG</a></li>
+        
+        <li><a href="/projects/">PROJECTS</a></li>
+        
+        <li><a href="https://davidsjoberg.github.io/cv/">CV</a></li>
+        
+      
+      </ul>
+    </div>
+  </div>
+</nav>
+
+      
+      <div class="container">
+        <div class="blog-post">
+          <h3>
+            <strong><a href="/blog/if-not-ifelse-or-if_else-then-what-else/">if not ifelse or if_else then what else?</a></strong>
+          </h3>
+        </div>
+        <div class="blog-title">
+          <h4>
+          June 16, 2019
+            &nbsp;&nbsp;
+            
+            <span class="label label-success">hablar</span>
+            
+            <span class="label label-success">R</span>
+            
+            <span class="label label-success">dplyr</span>
+            
+          </h4>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="blogpost">
+              <script src="/rmarkdown-libs/kePrint/kePrint.js"></script>
+
+
+<p>It is almost impossible to miss the <code>ifelse()</code> and <code>if_else()</code> functions in R. It’s the goto functions when you want to write an if-statement and apply the logic to every element of that vector. The <code>hablar</code> package introduces <code>if_else_()</code>, giving you a third way to do a vectorised if-else in R. Let’s take an example:</p>
+<pre class="r"><code>library(dplyr)
+library(hablar)
+library(lubridate)
+
+df &lt;- tibble(name = c(&quot;John&quot;, &quot;Lisa&quot;, &quot;Astrid&quot;),
+             birthday = ymd(&quot;1976-04-15&quot;, &quot;1983-02-03&quot;, &quot;1883-10-27&quot;))</code></pre>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+name
+</th>
+<th style="text-align:left;">
+birthday
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+John
+</td>
+<td style="text-align:left;">
+1976-04-15
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lisa
+</td>
+<td style="text-align:left;">
+1983-02-03
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Astrid
+</td>
+<td style="text-align:left;">
+1883-10-27
+</td>
+</tr>
+</tbody>
+</table>
+<p>In the data frame above you can see that the birthday of Astrid is in the year 1883, which we argue is an incorrect birthday. The task is to change it to missing.</p>
+<div id="why-use-if_else_-from-hablar" class="section level3">
+<h3>Why use <code>if_else_</code> from <strong>hablar</strong>?</h3>
+<p>With <code>if_else_()</code> from <code>hablar</code> we can write it as follows.</p>
+<pre class="r"><code>df %&gt;% 
+  mutate(birthday = if_else_(year(birthday) &lt; 1900, NA, birthday))</code></pre>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+name
+</th>
+<th style="text-align:left;">
+birthday
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+John
+</td>
+<td style="text-align:left;">
+1976-04-15
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lisa
+</td>
+<td style="text-align:left;">
+1983-02-03
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Astrid
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+</tbody>
+</table>
+<p>It solved our problem by setting the fauly birthday to <code>NA</code> (missing value).</p>
+</div>
+<div id="why-not-use-if_else-from-dplyr" class="section level3">
+<h3>Why not use <code>if_else</code> from <strong>dplyr</strong>?</h3>
+<p>You definetly could, but it forces you to be more specific than necessary. The above example would raise an error. You need to specify which type of NA you want. In <code>if_else</code> you need to write:</p>
+<pre class="r"><code>df %&gt;% 
+  mutate(birthday = if_else(year(birthday) &lt; 1900, as.Date(NA), birthday))</code></pre>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+name
+</th>
+<th style="text-align:left;">
+birthday
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+John
+</td>
+<td style="text-align:left;">
+1976-04-15
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lisa
+</td>
+<td style="text-align:left;">
+1983-02-03
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Astrid
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+</tbody>
+</table>
+<p>It does the same job, but is harder to read.</p>
+</div>
+<div id="why-not-use-ifelse-from-base-r" class="section level3">
+<h3>Why not use <code>ifelse()</code> from <strong>base R</strong>?</h3>
+<p>You should avoid it since it changes your data type, which makes it unreliable. Additionally, it removes attributes. The above cases with <code>ifelse()</code> returns integers which represent the amount of days passed since 1970-01-01. Simply confusing.</p>
+<pre class="r"><code>df %&gt;% 
+  mutate(birthday = ifelse(year(birthday) &lt; 1900, NA, birthday))</code></pre>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+name
+</th>
+<th style="text-align:right;">
+birthday
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+John
+</td>
+<td style="text-align:right;">
+2296
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lisa
+</td>
+<td style="text-align:right;">
+4781
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Astrid
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+</tbody>
+</table>
+<div id="read-more" class="section level4">
+<h4>Read more</h4>
+<p>For more examples and information install <code>hablar</code> and type <code>vignette(&quot;hablar&quot;)</code>.</p>
+</div>
+</div>
+
+              <hr>
+              <div class="related-posts">
+                <h5>Related Posts</h5>
+                
+                  <div class="row">
+                    <div class="col-sm-4 col-md-4 col-lg-4">
+                      <h6 style="text-align: right">
+                        October 21, 2018
+                      </h6>
+                    </div>
+                    <div class="col-sm-8 col-md-8 col-lg-8">
+                      <h6 style="text-align: left">
+                        <strong><a href="/blog/intro-hablar-convert/">convert - simple data type conversion</a></strong>
+                      </h6>
+                    </div>
+                  </div>
+                
+                  <div class="row">
+                    <div class="col-sm-4 col-md-4 col-lg-4">
+                      <h6 style="text-align: right">
+                        October 20, 2018
+                      </h6>
+                    </div>
+                    <div class="col-sm-8 col-md-8 col-lg-8">
+                      <h6 style="text-align: left">
+                        <strong><a href="/blog/intro-hablar-s/">s - short and simple summarizing</a></strong>
+                      </h6>
+                    </div>
+                  </div>
+                
+                  <div class="row">
+                    <div class="col-sm-4 col-md-4 col-lg-4">
+                      <h6 style="text-align: right">
+                        October 19, 2018
+                      </h6>
+                    </div>
+                    <div class="col-sm-8 col-md-8 col-lg-8">
+                      <h6 style="text-align: left">
+                        <strong><a href="/blog/intro-hablar-retype/">retype - auto data type conversion</a></strong>
+                      </h6>
+                    </div>
+                  </div>
+                
+              </div>
+            </div>
+          </div>
+          <hr>
+        <div class="disqus">
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+
+    (function() {
+      
+      
+      if (window.location.hostname == "localhost")
+        return;
+
+      var disqus_shortname = 'davidsjoberg';
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+        </div>
+      </div>
+      
+    </div>
+
+    
+    <footer>
+  <div id="footer">
+    <div class="container">
+      <p class="text-muted">&copy; All rights reserved. Powered by <a href="https://gohugo.io/">Hugo</a> and
+      <a href="http://www.github.com/nurlansu/hugo-sustain/">sustain</a> with ♥</p>
+    </div>
+  </div>
+</footer>
+<div class="footer"></div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="/js/docs.min.js"></script>
+<script src="/js/main.js"></script>
+
+<script src="/js/ie10-viewport-bug-workaround.js"></script>
+
+
+    
+  </body>
+</html>

@@ -6,10 +6,20 @@
     <description>Recent content in Hablar on David Sjoberg</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-US</language>
-    <lastBuildDate>Sun, 21 Oct 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 16 Jun 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/hablar/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>if not ifelse or if_else then what else?</title>
+      <link>/blog/if-not-ifelse-or-if_else-then-what-else/</link>
+      <pubDate>Sun, 16 Jun 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/if-not-ifelse-or-if_else-then-what-else/</guid>
+      <description>It is almost impossible to miss the ifelse() and if_else() functions in R. It’s the goto functions when you want to write an if-statement and apply the logic to every element of that vector. The hablar package introduces if_else_(), giving you a third way to do a vectorised if-else in R. Let’s take an example:
+library(dplyr) library(hablar) library(lubridate) df &amp;lt;- tibble(name = c(&amp;quot;John&amp;quot;, &amp;quot;Lisa&amp;quot;, &amp;quot;Astrid&amp;quot;), birthday = ymd(&amp;quot;1976-04-15&amp;quot;, &amp;quot;1983-02-03&amp;quot;, &amp;quot;1883-10-27&amp;quot;))   name  birthday      John  1976-04-15    Lisa  1983-02-03    Astrid  1883-10-27     In the data frame above you can see that the birthday of Astrid is in the year 1883, which we argue is an incorrect birthday.</description>
+    </item>
     
     <item>
       <title>convert - simple data type conversion</title>
